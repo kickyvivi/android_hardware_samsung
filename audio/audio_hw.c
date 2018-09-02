@@ -201,10 +201,6 @@ static int amplifier_open(void)
     rc = hw_get_module(AMPLIFIER_HARDWARE_MODULE_ID,
             (const hw_module_t **) &module);
     if (rc) {
-        if (rc == -ENOENT) {
-            // no amplifier HAL present
-            return -ENOENT;
-        }
         ALOGV("%s: Failed to obtain reference to amplifier module: %s\n",
                 __func__, strerror(-rc));
         return -ENODEV;
@@ -4313,7 +4309,7 @@ static int adev_open(const hw_module_t *module, const char *name,
         return -EINVAL;
     }
 
-    if (amplifier_open() != -ENOENT) {
+    if (amplifier_open() != 0) {
         ALOGE("Amplifier initialization failed");
     }
 
